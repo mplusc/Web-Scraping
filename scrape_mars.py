@@ -57,26 +57,19 @@ def scrape():
     df = mars_facts[0]
     df.columns = ["Characteristics", "Values"]
     df.head()
-
-    # Using Pandas to convert the data to HTML table string
     mars_html_table = df.to_html()
-
-    # Replacing extra '\n' with spaces
     mars_html_table.replace('\n', '')
 
-    # Save HTML table 
-    #df.to_html('mars_facts_table.html')
     mars["facts"] = df
+
+
 
 
     url_hemispheres = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     browser.visit(url_hemispheres)
     html = browser.html
     soup = bs(html, "html.parser")
-
-# Create a container to hold list of images
     url_hemisphere_images = []
-
     products = soup.find("div", class_ = "result-list" )
     hemispheres = products.find_all("div", class_="item")
 
@@ -93,6 +86,8 @@ def scrape():
         url_hemisphere_images.append({"title": title, "img_url": image_url})
 
     mars["hemispheres"]= url_hemisphere_images    
+    
+    
     browser.quit()     
 
     return mars
